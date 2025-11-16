@@ -14,7 +14,7 @@ from discord.ext import commands
 # export DISCORD_BOT_TOKEN="ton-token"
 BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN", "TON_BOT_TOKEN_ICI")
 
-GUILD_ID = 1434470610565726325  # <-- ID de ton serveur Gearted
+GUILD_ID = 1438463061181726743  # <-- ID de ton serveur Gearted
 
 GIVEAWAY_CHANNEL_NAME = "🎁-giveaways"        # salon où les gens tapent !tirage
 HOF_CHANNEL_NAME = "🏆-hall-of-fame"          # salon d'annonce des gagnants du tirage
