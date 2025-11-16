@@ -20,6 +20,7 @@ builders_points.json
 # Fichiers contenant des tokens/secrets
 set_permissions_gearted.py
 set_permissions_gearted_rest.py
+gearted_tirage_simple.py
 
 # IDE
 .vscode/
