@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+
+# Environment variables
+.env
+.env.local
+
+# Bot data files (will be created automatically)
+tirage_participants.json
+builders_points.json
+
+# Fichiers contenant des tokens/secrets
+set_permissions_gearted.py
+set_permissions_gearted_rest.py
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.bak
+*#
+
