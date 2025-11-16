@@ -119,11 +119,18 @@ def save_builder_points() -> None:
 @bot.event
 async def on_ready():
     print(f"✅ Connecté comme {bot.user} ({bot.user.id})")
+    
+    # Afficher tous les serveurs où le bot est présent
+    print(f"📋 Le bot est présent sur {len(bot.guilds)} serveur(s) :")
+    for g in bot.guilds:
+        print(f"   → {g.name} (ID: {g.id})")
+    
     guild = bot.get_guild(GUILD_ID)
     if guild:
-        print(f"✅ Serveur détecté : {guild.name} ({guild.id})")
+        print(f"✅ Serveur Gearted configuré détecté : {guild.name} ({guild.id})")
     else:
-        print("⚠️ Serveur non trouvé, vérifie GUILD_ID.")
+        print(f"⚠️ Serveur avec GUILD_ID={GUILD_ID} non trouvé.")
+        print(f"⚠️ Utilise l'un des IDs ci-dessus dans le code.")
 
 
 def get_role(guild: discord.Guild, name: str) -> Optional[discord.Role]:
