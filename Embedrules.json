@@ -1,0 +1,40 @@
+{
+    "content": "",
+    "embeds": [
+      {
+        "title": "📜 RÈGLES DU QG GEARTED",
+        "description": "Merci de prendre un instant pour lire les règles.\nLe QG Gearted est un espace pour les joueurs d’airsoft francophones, basé sur le respect, le fair-play et l’entraide.\n\nCes règles permettent de garder une ambiance propre, fun et constructive pour tout le monde.",
+        "color": 15105570,
+        "fields": [
+          {
+            "name": "🫡 1. Respect & Fair-Play",
+            "value": "Aucune insulte, provocation, harcèlement, racisme ou attitude toxique.\nL’airsoft repose sur l’honneur et la bonne ambiance."
+          },
+          {
+            "name": "🚫 2. Contenus illégaux",
+            "value": "Pas de répliques modifiées illégalement, pas de contrefaçons, pas de dropshipping douteux.\nOn veut une communauté saine et fiable."
+          },
+          {
+            "name": "🛒 3. Ventes & marketplace",
+            "value": "Les transactions seront centralisées via **Gearted** lorsque l’app sera en ligne.\nPas de promotion d’autres marketplaces."
+          },
+          {
+            "name": "🤝 4. Partenariats & Publicité",
+            "value": "Toute demande de partenariat, sponsoring ou mise en avant doit aller dans **#📢-demande-pub**.\nPas d’auto-promo sauvage dans les autres salons."
+          },
+          {
+            "name": "📵 5. Pas de spam",
+            "value": "Pas de flood, pas de messages copiés-collés, pas de spam d’emojis.\nOn reste lisibles pour tout le monde."
+          },
+          {
+            "name": "🛡️ 6. Décisions du staff",
+            "value": "Les modérateurs peuvent intervenir pour calmer un conflit ou supprimer du contenu.\nLeur décision fait foi en dernier recours."
+          }
+        ],
+        "footer": {
+          "text": "Gearted • Règlement du QG"
+        }
+      }
+    ]
+  }
+  

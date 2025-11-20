@@ -1,0 +1,28 @@
+{
+    "content": "",
+    "embeds": [
+      {
+        "title": "🌍 CHOISIS TON PAYS",
+        "description": "Pour qu’on puisse t’envoyer les bonnes infos (parties, annonces, events, etc.), choisis ton pays en réagissant avec le bon drapeau ci-dessous.\n\nCela te donnera un **rôle pays** et nous permettra de ping les bonnes personnes au bon moment.",
+        "color": 3447003,
+        "fields": [
+          {
+            "name": "🇫🇷 France",
+            "value": "Réagis avec 🇫🇷 pour obtenir le rôle **France**.\nTu recevras les infos et annonces liées à la communauté FR."
+          },
+          {
+            "name": "🇧🇪 Belgique",
+            "value": "Réagis avec 🇧🇪 pour obtenir le rôle **Belgique**.\nTu recevras les infos et annonces liées à la communauté BE."
+          },
+          {
+            "name": "🇨🇭 Suisse",
+            "value": "Réagis avec 🇨🇭 pour obtenir le rôle **Suisse**.\nTu recevras les infos et annonces liées à la communauté CH."
+          }
+        ],
+        "footer": {
+          "text": "Gearted • Choix du pays • Rôles régionaux"
+        }
+      }
+    ]
+  }
+  

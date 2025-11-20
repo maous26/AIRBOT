@@ -1,6 +1,7 @@
 import os
 import json
 import random
+from datetime import datetime, timezone, timedelta
 from typing import Optional, Set, Dict
 
 import discord
@@ -10,30 +11,43 @@ from discord.ext import commands
 # CONFIG À ADAPTER
 # ==========================
 
-# ⚠️ Mets ton token de bot dans une variable d'environnement de préférence :
-# export DISCORD_BOT_TOKEN="ton-token"
-BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN", "TON_BOT_TOKEN_ICI")
+BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
 
-GUILD_ID = 1438463061181726743  # <-- ID de ton serveur Gearted
+if not BOT_TOKEN:
+    raise RuntimeError(
+        "DISCORD_BOT_TOKEN n'est pas défini. "
+        "Configure la variable d'environnement DISCORD_BOT_TOKEN avant de lancer le bot."
+    )
 
-GIVEAWAY_CHANNEL_NAME = "🎁-giveaways"        # salon où les gens tapent !tirage
-HOF_CHANNEL_NAME = "🏆-hall-of-fame"          # salon d'annonce des gagnants du tirage
-WINNER_ROLE_NAME = "Gagnant de la semaine"    # rôle gagnant tirage
+GUILD_ID = 1438463061181726743  # ID du serveur Gearted
 
-# --- Système Builders ---
-BUILDERS_ROLE_NAME = "Unité Alpha – Builders Gearted"  # adapte au nom EXACT du rôle
-BUILDERS_ANNOUNCE_CHANNEL_NAME = "🎯-programme-builders"  # salon QG Builders
-BUILDER_THRESHOLD = 200  # seuil de points pour débloquer le rôle Builders
+# Salons
+GIVEAWAY_CHANNEL_NAME = "🎁-giveaways"
+HOF_CHANNEL_NAME = "🏆-hall-of-fame"
+BUILDERS_ANNOUNCE_CHANNEL_NAME = "🎯-programme-builders"
+
+# Rôles
+WINNER_ROLE_NAME = "Gagnant de la semaine"
+BUILDERS_ROLE_NAME = "Unité Alpha – Builders Gearted"
+RECRUE_ROLE_NAME = "Recrue"
+OPERATEUR_ROLE_NAME = "Opérateur"
+VETERAN_ROLE_NAME = "Vétéran"
+
+# Seuils Builders
+BUILDER_THRESHOLD = 200      # seuil pour rôle Builders
+VETERAN_THRESHOLD = 400      # seuil pour Vétéran
+
+# Activité → Opérateur
+OPERATOR_MIN_MESSAGES = 30   # messages min pour passer Opérateur
+OPERATOR_MIN_DAYS = 7        # ancienneté min (jours) sur le serveur
 
 COMMAND_PREFIX = "!"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Fichier JSON pour la persistance des participants tirage
 PARTICIPANTS_FILE = os.path.join(BASE_DIR, "tirage_participants.json")
-
-# Fichier JSON pour la persistance des points Builders
 BUILDERS_FILE = os.path.join(BASE_DIR, "builders_points.json")
+ACTIVITY_FILE = os.path.join(BASE_DIR, "activity_stats.json")
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -48,6 +62,9 @@ participants: Dict[int, Set[int]] = {}
 # builder_points[guild_id] = { user_id: points }
 builder_points: Dict[int, Dict[int, int]] = {}
 
+# activity_counts[guild_id] = { user_id: message_count }
+activity_counts: Dict[int, Dict[int, int]] = {}
+
 
 # ==========================
 # PERSISTENCE JSON
@@ -61,10 +78,7 @@ def load_participants() -> None:
     try:
         with open(PARTICIPANTS_FILE, "r", encoding="utf-8") as f:
             data = json.load(f)
-        participants = {
-            int(gid_str): set(user_ids)
-            for gid_str, user_ids in data.items()
-        }
+        participants = {int(g): set(v) for g, v in data.items()}
         print(f"📂 Participants chargés : {participants}")
     except Exception as e:
         print(f"⚠️ Erreur chargement participants : {e}")
@@ -73,7 +87,7 @@ def load_participants() -> None:
 
 def save_participants() -> None:
     try:
-        data = {str(gid): list(user_ids) for gid, user_ids in participants.items()}
+        data = {str(g): list(v) for g, v in participants.items()}
         with open(PARTICIPANTS_FILE, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
         print("💾 Participants sauvegardés.")
@@ -112,6 +126,37 @@ def save_builder_points() -> None:
         print(f"⚠️ Erreur sauvegarde points Builders : {e}")
 
 
+def load_activity_counts() -> None:
+    global activity_counts
+    if not os.path.exists(ACTIVITY_FILE):
+        activity_counts = {}
+        return
+    try:
+        with open(ACTIVITY_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        activity_counts = {
+            int(gid_str): {int(uid_str): cnt for uid_str, cnt in users.items()}
+            for gid_str, users in data.items()
+        }
+        print(f"📂 Stats activité chargées : {activity_counts}")
+    except Exception as e:
+        print(f"⚠️ Erreur chargement activité : {e}")
+        activity_counts = {}
+
+
+def save_activity_counts() -> None:
+    try:
+        data = {
+            str(gid): {str(uid): cnt for uid, cnt in users.items()}
+            for gid, users in activity_counts.items()
+        }
+        with open(ACTIVITY_FILE, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+        print("💾 Activité sauvegardée.")
+    except Exception as e:
+        print(f"⚠️ Erreur sauvegarde activité : {e}")
+
+
 # ==========================
 # UTILITAIRES DISCORD
 # ==========================
@@ -119,18 +164,11 @@ def save_builder_points() -> None:
 @bot.event
 async def on_ready():
     print(f"✅ Connecté comme {bot.user} ({bot.user.id})")
-    
-    # Afficher tous les serveurs où le bot est présent
-    print(f"📋 Le bot est présent sur {len(bot.guilds)} serveur(s) :")
-    for g in bot.guilds:
-        print(f"   → {g.name} (ID: {g.id})")
-    
     guild = bot.get_guild(GUILD_ID)
     if guild:
-        print(f"✅ Serveur Gearted configuré détecté : {guild.name} ({guild.id})")
+        print(f"✅ Serveur détecté : {guild.name} ({guild.id})")
     else:
-        print(f"⚠️ Serveur avec GUILD_ID={GUILD_ID} non trouvé.")
-        print(f"⚠️ Utilise l'un des IDs ci-dessus dans le code.")
+        print("⚠️ Serveur non trouvé, vérifie GUILD_ID.")
 
 
 def get_role(guild: discord.Guild, name: str) -> Optional[discord.Role]:
@@ -142,12 +180,92 @@ def get_text_channel(guild: discord.Guild, name: str) -> Optional[discord.TextCh
 
 
 def is_staff(member: discord.Member) -> bool:
-    # Staff = permission "Gérer le serveur"
     return member.guild_permissions.manage_guild
 
 
 # ==========================
-# COMMANDES DE DEBUG / SANTÉ
+# EVENTS : JOIN + MESSAGE (Recrue / Opérateur auto)
+# ==========================
+
+@bot.event
+async def on_member_join(member: discord.Member):
+    """Donner automatiquement le rôle Recrue à tout nouveau membre."""
+    if member.guild.id != GUILD_ID:
+        return
+
+    recrue_role = get_role(member.guild, RECRUE_ROLE_NAME)
+    if recrue_role is None:
+        print(f"⚠️ Rôle Recrue '{RECRUE_ROLE_NAME}' introuvable.")
+        return
+
+    try:
+        await member.add_roles(recrue_role, reason="Nouveau membre")
+        print(f"👋 Rôle Recrue donné à {member} ({member.id})")
+    except discord.Forbidden:
+        print("⚠️ Impossible de donner le rôle Recrue (permissions).")
+
+
+async def maybe_promote_operator(member: discord.Member):
+    """Promotion automatique en Opérateur si critères atteints."""
+    if member.guild.id not in activity_counts:
+        return
+
+    guild_id = member.guild.id
+    user_id = member.id
+    msg_count = activity_counts.get(guild_id, {}).get(user_id, 0)
+
+    # Ancienneté
+    if member.joined_at is None:
+        return
+
+    now = datetime.now(timezone.utc)
+    if now - member.joined_at < timedelta(days=OPERATOR_MIN_DAYS):
+        return
+
+    if msg_count < OPERATOR_MIN_MESSAGES:
+        return
+
+    oper_role = get_role(member.guild, OPERATEUR_ROLE_NAME)
+    if oper_role is None:
+        print(f"⚠️ Rôle Opérateur '{OPERATEUR_ROLE_NAME}' introuvable.")
+        return
+
+    if oper_role in member.roles:
+        return
+
+    try:
+        await member.add_roles(oper_role, reason="Critères d'activité atteints (messages + ancienneté)")
+        print(f"📈 {member} promu automatiquement en Opérateur.")
+    except discord.Forbidden:
+        print("⚠️ Impossible de donner le rôle Opérateur (permissions).")
+
+
+@bot.event
+async def on_message(message: discord.Message):
+    """Compter les messages pour la promotion Opérateur + laisser passer les commandes."""
+    if message.author.bot:
+        await bot.process_commands(message)
+        return
+
+    if message.guild and message.guild.id == GUILD_ID:
+        guild_id = message.guild.id
+        user_id = message.author.id
+
+        if guild_id not in activity_counts:
+            activity_counts[guild_id] = {}
+
+        activity_counts[guild_id][user_id] = activity_counts[guild_id].get(user_id, 0) + 1
+        save_activity_counts()
+
+        # Essayer de promouvoir en Opérateur
+        if isinstance(message.author, discord.Member):
+            await maybe_promote_operator(message.author)
+
+    await bot.process_commands(message)
+
+
+# ==========================
+# COMMANDES DE SANTÉ
 # ==========================
 
 @bot.command(name="ping")
@@ -163,9 +281,9 @@ async def ping(ctx: commands.Context):
 async def tirage(ctx: commands.Context, action: Optional[str] = None):
     """
     Usage :
-    - Membres : `!tirage` dans #🎁-giveaways  → inscription à la liste
-    - Staff  : `!tirage go`      → tirage parmi les inscrits
-               `!tirage liste`   → voir la liste des inscrits
+    - Membres : `!tirage` dans #🎁-giveaways  → inscription
+    - Staff  : `!tirage go`      → tirage
+               `!tirage liste`   → voir inscrits
                `!tirage reset`   → vider la liste
     """
 
@@ -176,7 +294,7 @@ async def tirage(ctx: commands.Context, action: Optional[str] = None):
 
     giveaway_channel = get_text_channel(guild, GIVEAWAY_CHANNEL_NAME)
 
-    # --- CAS 1 : participation membre ---
+    # Participation
     if action is None:
         if giveaway_channel and ctx.channel.id != giveaway_channel.id:
             await ctx.send(
@@ -199,7 +317,7 @@ async def tirage(ctx: commands.Context, action: Optional[str] = None):
             )
         return
 
-    # à partir d'ici : staff only
+    # Staff only
     action = action.lower()
 
     if not isinstance(ctx.author, discord.Member) or not is_staff(ctx.author):
@@ -208,7 +326,6 @@ async def tirage(ctx: commands.Context, action: Optional[str] = None):
 
     guild_participants = list(participants.get(guild.id, set()))
 
-    # --- CAS 2 : !tirage liste ---
     if action == "liste":
         if not guild_participants:
             await ctx.send("📋 Aucun participant inscrit pour le moment.")
@@ -235,14 +352,12 @@ async def tirage(ctx: commands.Context, action: Optional[str] = None):
         )
         return
 
-    # --- CAS 3 : !tirage reset ---
     if action == "reset":
         participants[guild.id] = set()
         save_participants()
         await ctx.send("🧹 La liste des participants au tirage a été **réinitialisée** pour ce serveur.")
         return
 
-    # --- CAS 4 : !tirage go / start / pick ---
     if action in ("go", "start", "pick"):
         if not guild_participants:
             await ctx.send("❌ Aucun participant inscrit pour ce tirage (personne n'a tapé `!tirage`).")
@@ -301,7 +416,6 @@ async def tirage(ctx: commands.Context, action: Optional[str] = None):
 
         return
 
-    # --- CAS 5 : argument inconnu ---
     await ctx.send(
         "⚠️ Usage de la commande `!tirage` :\n"
         "• Membres : `!tirage` dans #🎁-giveaways pour s'inscrire\n"
@@ -311,13 +425,8 @@ async def tirage(ctx: commands.Context, action: Optional[str] = None):
     )
 
 
-@tirage.error
-async def tirage_error(ctx: commands.Context, error):
-    print(f"[ERREUR COMMANDE !tirage] {error}")
-
-
 # ==========================
-# SYSTÈME DE POINTS BUILDERS
+# SYSTÈME DE POINTS BUILDERS & PROMOS BUILDERS / VÉTÉRAN
 # ==========================
 
 def get_user_builder_points(guild_id: int, user_id: int) -> int:
@@ -330,40 +439,50 @@ def set_user_builder_points(guild_id: int, user_id: int, points: int) -> None:
     builder_points[guild_id][user_id] = max(0, points)
 
 
-async def maybe_grant_builder_role(guild: discord.Guild, member: discord.Member):
-    """Donne le rôle Builders si le seuil est atteint."""
+async def maybe_grant_builder_and_veteran(guild: discord.Guild, member: discord.Member):
+    """Attribue automatiquement Builders et Vétéran en fonction des points."""
     points = get_user_builder_points(guild.id, member.id)
-    builders_role = get_role(guild, BUILDERS_ROLE_NAME)
-    if builders_role is None:
-        print(f"⚠️ Rôle Builders `{BUILDERS_ROLE_NAME}` introuvable.")
-        return
 
-    if points >= BUILDER_THRESHOLD and builders_role not in member.roles:
+    builders_role = get_role(guild, BUILDERS_ROLE_NAME)
+    veteran_role = get_role(guild, VETERAN_ROLE_NAME)
+
+    announce_channel = (
+        get_text_channel(guild, BUILDERS_ANNOUNCE_CHANNEL_NAME)
+        or get_text_channel(guild, HOF_CHANNEL_NAME)
+    )
+
+    # Builders
+    if builders_role is not None and points >= BUILDER_THRESHOLD and builders_role not in member.roles:
         try:
             await member.add_roles(builders_role, reason="Seuil de points Builders atteint")
+            msg = (
+                f"🛠️ **Nouveau Builder Gearted !**\n"
+                f"{member.mention} vient d'atteindre **{points} points Builders** "
+                f"et débloque le rôle **{builders_role.mention}** 🎖️"
+            )
+            if announce_channel:
+                await announce_channel.send(msg)
         except discord.Forbidden:
             print("⚠️ Impossible d'ajouter le rôle Builders (permissions).")
-            return
 
-        announce_channel = get_text_channel(guild, BUILDERS_ANNOUNCE_CHANNEL_NAME) or \
-                           get_text_channel(guild, HOF_CHANNEL_NAME)
-
-        msg = (
-            f"🛠️ **Nouveau Builder Gearted !**\n"
-            f"{member.mention} vient d'atteindre **{points} points Builders** "
-            f"et débloque le rôle **{builders_role.mention}** 🎖️"
-        )
-        if announce_channel:
-            await announce_channel.send(msg)
-        else:
-            print("⚠️ Aucun salon d'annonce Builders trouvé.")
+    # Vétéran
+    if veteran_role is not None and points >= VETERAN_THRESHOLD and veteran_role not in member.roles:
+        try:
+            await member.add_roles(veteran_role, reason="Seuil de points Vétéran atteint")
+            msg = (
+                f"🏅 **Nouveau Vétéran Gearted !**\n"
+                f"{member.mention} vient d'atteindre **{points} points Builders** "
+                f"et débloque le rôle **{veteran_role.mention}** 🔥"
+            )
+            if announce_channel:
+                await announce_channel.send(msg)
+        except discord.Forbidden:
+            print("⚠️ Impossible d'ajouter le rôle Vétéran (permissions).")
 
 
 @bot.command(name="builderadd")
 async def builder_add(ctx: commands.Context, member: discord.Member, points: int):
-    """Staff : ajouter des points Builders à un membre.
-    Usage: !builderadd @user 10
-    """
+    """Staff : ajouter des points Builders à un membre."""
     if not isinstance(ctx.author, discord.Member) or not is_staff(ctx.author):
         await ctx.send("⛔ Seul le staff peut utiliser cette commande.")
         return
@@ -386,14 +505,12 @@ async def builder_add(ctx: commands.Context, member: discord.Member, points: int
         f"(total : **{new_points}**)."
     )
 
-    await maybe_grant_builder_role(guild, member)
+    await maybe_grant_builder_and_veteran(guild, member)
 
 
 @bot.command(name="builderremove")
 async def builder_remove(ctx: commands.Context, member: discord.Member, points: int):
-    """Staff : retirer des points Builders à un membre.
-    Usage: !builderremove @user 5
-    """
+    """Staff : retirer des points Builders à un membre."""
     if not isinstance(ctx.author, discord.Member) or not is_staff(ctx.author):
         await ctx.send("⛔ Seul le staff peut utiliser cette commande.")
         return
@@ -419,18 +536,13 @@ async def builder_remove(ctx: commands.Context, member: discord.Member, points: 
 
 @bot.command(name="builderstats")
 async def builder_stats(ctx: commands.Context, member: Optional[discord.Member] = None):
-    """Voir les points Builders.
-    Usage:
-      - !builderstats           → voir ses propres points
-      - !builderstats @user     → staff : voir ceux de quelqu'un
-    """
+    """Voir les points Builders."""
     guild = ctx.guild
     if guild is None:
         return
 
     target = member or ctx.author
 
-    # Si on demande les points de quelqu'un d'autre, nécessiter staff
     if member is not None and (not isinstance(ctx.author, discord.Member) or not is_staff(ctx.author)):
         await ctx.send("⛔ Seul le staff peut voir les points des autres membres.")
         return
@@ -438,15 +550,13 @@ async def builder_stats(ctx: commands.Context, member: Optional[discord.Member] 
     pts = get_user_builder_points(guild.id, target.id)
     await ctx.send(
         f"🧱 Points Builders de {target.mention} : **{pts}** "
-        f"(seuil rôle Builders : **{BUILDER_THRESHOLD}**)"
+        f"(Builders : {BUILDER_THRESHOLD} pts • Vétéran : {VETERAN_THRESHOLD} pts)"
     )
 
 
 @bot.command(name="builderboard")
 async def builder_board(ctx: commands.Context, limit: int = 10):
-    """Afficher le classement Builders.
-    Usage: !builderboard [limit]
-    """
+    """Afficher le classement Builders."""
     guild = ctx.guild
     if guild is None:
         return
@@ -456,7 +566,6 @@ async def builder_board(ctx: commands.Context, limit: int = 10):
         await ctx.send("📊 Aucun point Builders enregistré pour l'instant.")
         return
 
-    # Trier par points décroissants
     sorted_users = sorted(users_pts.items(), key=lambda kv: kv[1], reverse=True)
     lines = []
     rank = 1
@@ -477,18 +586,8 @@ async def builder_board(ctx: commands.Context, limit: int = 10):
         description=desc,
         color=0x3BA55D,
     )
-    embed.set_footer(text=f"Seuil pour le rôle Builders : {BUILDER_THRESHOLD} points")
+    embed.set_footer(text=f"Seuil Builders : {BUILDER_THRESHOLD} pts • Vétéran : {VETERAN_THRESHOLD} pts")
     await ctx.send(embed=embed)
-
-
-@builder_add.error
-@builder_remove.error
-@builder_stats.error
-@builder_board.error
-async def builder_cmd_error(ctx: commands.Context, error):
-    print(f"[ERREUR COMMANDE BUILDERS] {error}")
-    # Tu peux afficher un message si tu veux :
-    # await ctx.send(f"⚠️ Erreur commande Builders : {error}")
 
 
 # ==========================
@@ -498,4 +597,5 @@ async def builder_cmd_error(ctx: commands.Context, error):
 if __name__ == "__main__":
     load_participants()
     load_builder_points()
+    load_activity_counts()
     bot.run(BOT_TOKEN)

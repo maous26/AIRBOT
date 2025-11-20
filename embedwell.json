@@ -1,0 +1,40 @@
+{
+    "content": "",
+    "embeds": [
+      {
+        "title": "🎖 Rôles Gearted – choisis ton camp & progresse",
+        "description": "Gearted est une communauté dédiée aux joueurs d’airsoft 🇫🇷🇧🇪🇨🇭.\n\nNotre but : construire ensemble une app utile, fun et pensée par les joueurs. Les rôles te permettent de voir ta progression et ton implication dans le projet.",
+        "color": 16747520,
+        "fields": [
+          {
+            "name": "🌍 Choisis ton pays",
+            "value": "Ces rôles servent à organiser les rencontres IRL et les discussions locales.\n\n🇫🇷 **France**\n🇧🇪 **Belgique**\n🇨🇭 **Suisse**\n\n> Clique sur la réaction correspondante sous ce message pour sélectionner ton pays."
+          },
+          {
+            "name": "🟦 Recrue – rôle de base",
+            "value": "Lorsque tu rejoins le serveur, tu deviens automatiquement **Recrue**.\n\n> Tu découvres le serveur, les salons, les missions et la communauté."
+          },
+          {
+            "name": "🟩 Opérateur – rôle d’activité",
+            "value": "Ce rôle récompense les membres **actifs**.\n\n✅ Critères automatiques :\n• au moins **30 messages** dans les salons publics\n• au moins **7 jours** sur le serveur\n\n> Quand ces conditions sont remplies, tu passes automatiquement **Opérateur**."
+          },
+          {
+            "name": "🏗 Unité Alpha – Builders Gearted",
+            "value": "Rôle premium pour celles et ceux qui aident à construire l’app Gearted.\n\n🧱 **Points Builders – comment en gagner ?**\n• +15 pts : bug clair avec contexte + capture (`🐞-bugs-retours`)\n• +10 pts : bug simple\n• +20 pts : idée de fonctionnalité utile et argumentée (`💡-idées-suggestions`)\n• +5 pts : suggestion mineure\n• +25 pts : retour de test détaillé dans `🧪-beta-gearted`\n• +10 pts : retour simple bêta\n• +5 pts : aide à un autre membre (support, info, explication)\n• +20 pts : participation à une **mission de la semaine**\n• +50 pts : gagner une mission\n\n🎯 **Seuil Builders :**\n• À **200 points**, tu débloques automatiquement le rôle **Builders Gearted**.\n\n> Tes points sont gérés par un système interne. Tu peux voir ton total avec la commande `!builderstats`."
+          },
+          {
+            "name": "🏅 Vétéran – rôle de confiance",
+            "value": "Le rôle **Vétéran** récompense les membres très impliqués sur la durée.\n\n🔥 **Seuil Vétéran :**\n• À **400 points Builders**, le rôle **Vétéran** est attribué automatiquement.\n\n> Les Vétérans sont les piliers de la communauté : testeurs réguliers, retours constructifs, aide aux nouveaux, soutien au projet."
+          },
+          {
+            "name": "🎁 Rôles spéciaux",
+            "value": "🥇 **Gagnant de la semaine**\n> Rôle temporaire attribué via le tirage hebdomadaire dans `🎁-giveaways`. Il passe au nouveau gagnant chaque semaine.\n\n> Pour participer : complète la mission de la semaine puis tape `!tirage` dans `🎁-giveaways`."
+          }
+        ],
+        "footer": {
+          "text": "Prochaine étape : choisis ton drapeau, passe dire bonjour, et commence à gagner des points Builders."
+        }
+      }
+    ]
+  }
+  

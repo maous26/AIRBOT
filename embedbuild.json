@@ -1,0 +1,36 @@
+{
+    "content": "",
+    "embeds": [
+      {
+        "title": "🎖 PROGRAMME BUILDERS GEARTED",
+        "description": "Le rôle **Builders Gearted** récompense les membres qui participent activement à la construction de la future app : idées, tests, retours, missions, parrainage.\n\nC’est l’un des rôles les plus prestigieux du QG.",
+        "color": 16098851,
+        "fields": [
+          {
+            "name": "🎁 Avantages du rôle Builders",
+            "value": "• 1 mois **sans commission** sur Gearted pour tous ceux qui obtiennent le rôle\n• Pour les **10 premiers Builders** : **abonnement Premium à vie**\n• Accès à un salon privé réservé aux Builders\n• Influence directe sur le développement de l’app"
+          },
+          {
+            "name": "📊 Score Builder : comment gagner des points ?",
+            "value": "Tu gagnes des **points Builder** en fonction de tes contributions :\n\n• 🐞 Bug clair, reproductible → `+3 pts`\n• 💡 Idée argumentée → `+4 pts`\n• 💡 Idée adoptée dans le backlog → `+6 pts`\n• 🎯 Participation sérieuse à une mission → `+1 à +3 pts`\n• ⭐ Contribution exceptionnelle (super utile) → `+5 pts`\n• 🤝 Parrainage d’un membre actif → `+3 pts`"
+          },
+          {
+            "name": "🎯 Objectif à atteindre",
+            "value": "Objectif provisoire : **20 points Builder** = rôle **Builders Gearted**.\n\nLe seuil pourra être ajusté en fonction de l’activité de la communauté."
+          },
+          {
+            "name": "🤝 Règles du parrainage",
+            "value": "Pour qu’un parrainage compte :\n• Le filleul rejoint le serveur\n• Il se présente et participe vraiment\n• Il mentionne qui l’a invité\n\nLes comptes fake, inactifs ou créés juste pour gratter des points ne seront pas pris en compte."
+          },
+          {
+            "name": "📌 Gestion & transparence",
+            "value": "Les points Builder sont suivis par le staff via un système interne.\n\nQuand tu dépasses le seuil :\n• Tu reçois le rôle **Builders Gearted**\n• Tu es annoncé dans **<#🏆-hall-of-fame>**\n• Tes avantages seront activés lorsque l’app sera en production."
+          }
+        ],
+        "footer": {
+          "text": "Gearted • Unité Builders"
+        }
+      }
+    ]
+  }
+  

@@ -1,0 +1,36 @@
+{
+    "content": "",
+    "embeds": [
+      {
+        "title": "🎖  NOUVEAU RÔLE : BUILDERS GEARTED",
+        "description": "Nous lançons un rôle spécial pour récompenser les membres qui **aident à construire l’app Gearted** avec leurs idées, leurs retours et leur implication.\n\nCe rôle est réservé aux vrais **bâtisseurs de la communauté**.",
+        "color": 16098851,
+        "fields": [
+          {
+            "name": "🪖  QUʼEST-CE QUE LE RÔLE BUILDERS ?",
+            "value": "Les **Builders Gearted** sont les membres qui participent activement à l’amélioration de l’app et de la plateforme : bugs, idées, tests, missions, parrainage…\n\nIls deviennent une sorte **d’unité d’élite** de la commu Gearted."
+          },
+          {
+            "name": "🎁  AVANTAGES EXCLUSIFS",
+            "value": "• ✅ **1 mois sans commission** sur Gearted pour tous ceux qui obtiennent le rôle\n• 🏆 Pour les **10 premiers Builders** : **abonnement Premium à vie**\n\nCes avantages seront appliqués quand l’app sera en production."
+          },
+          {
+            "name": "📊  COMMENT GAGNER DES POINTS BUILDER ?",
+            "value": "Un **Score Builder** est attribué en fonction de tes contributions :\n\n• 🐞 Bugs remontés (clairs, utiles, reproductibles)\n• 💡 Idées de fonctionnalités bien expliquées\n• 🎯 Participation sérieuse aux **missions hebdo**\n• 🧪 Tests et retours détaillés sur l’app\n• 🤝 **Parrainage de nouveaux membres** (voir ci-dessous)\n\n👉 **Objectif provisoire : 20 points Builder = rôle Builders Gearted.**\n*(Le seuil pourra être ajusté en fonction de l’activité.)*"
+          },
+          {
+            "name": "🤝  PARRAINAGE & MISSIONS SPÉCIALES",
+            "value": "Le parrainage fera partie des missions :\n\n• Chaque filleul qui rejoint le serveur **et participe** (présentation / message utile) pourra te rapporter des points\n• Certaines **missions de la semaine** seront dédiées au parrainage (par ex. : ramener 1–2 nouveaux membres actifs)\n\n⚠️ Objectif : **qualité > quantité**. Le spam d’invitations ou les faux comptes ne seront pas comptés."
+          },
+          {
+            "name": "🚀  COMMENT ÇA SERA GÉRÉ ?",
+              "value": "Le staff suivra les points via un système interne (tableau/outil dédié).\n\nLorsqu’un membre atteint le **seuil Builder**, il reçoit :\n• le rôle **Builders Gearted**\n• l’annonce dans **<#🏆-hall-of-fame**\n• ses avantages associés (lorsque l’app sera live)\n\nTout sera expliqué et mis à jour régulièrement pour garder le système **transparent et mérité**."
+            }
+        ],
+        "footer": {
+          "text": "Gearted • Programme Builders & Parrainage"
+        }
+      }
+    ]
+  }
+  

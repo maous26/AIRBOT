@@ -1,0 +1,24 @@
+{
+    "content": "",
+    "embeds": [
+      {
+        "title": "📊 TRANSACTIONS RÉALISÉES PAR LA COMMUNAUTÉ",
+        "description": "Ce salon recense les ventes et échanges **réussis** entre membres de la communauté Gearted.\n\nIl sert de **preuve sociale** : il montre que la commu est active, fiable et engagée.",
+        "color": 3066993,
+        "fields": [
+          {
+            "name": "📝 Comment publier une transaction ?",
+            "value": "Utilise un des formats suivants :\n\n• **[Vente]** Nom de l’objet – Prix\n   Vendu par @Vendeur → @Acheteur\n\n• **[Échange]** Objet A ↔ Objet B\n   Échange entre @Membre1 et @Membre2"
+          },
+          {
+            "name": "⚠️ Règles pour ce salon",
+            "value": "• Pas de négociation ici → faites-le en MP\n• Pas de liens externes vers d’autres marketplaces\n• Poste uniquement des transactions **réelles et vérifiées**\n\nCe salon a pour but de renforcer la **confiance** dans la communauté."
+          }
+        ],
+        "footer": {
+          "text": "Gearted • Transactions entre membres"
+        }
+      }
+    ]
+  }
+  

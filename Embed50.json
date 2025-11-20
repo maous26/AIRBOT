@@ -1,0 +1,36 @@
+{
+    "content": "",
+    "embeds": [
+      {
+        "title": "💰 COMMENT GAGNER LES 50€ CHAQUE SEMAINE ?",
+        "description": "Chaque semaine, une **Opération Gearted** est lancée.\nEn participant aux missions, tu peux :\n\n• Gagner **50€** (cash, bon d’achat ou récompense annoncée)\n• Gagner des **points Builder** pour débloquer le rôle 🎖 *Builders Gearted*\n\nCe système récompense la **participation utile**, pas le spam.",
+        "color": 16763080,
+        "fields": [
+          {
+            "name": "🎯  LE PRINCIPE",
+            "value": "• Une nouvelle **mission** est annoncée dans <#ID_MISSIONS_SEMAINE>\n• Tu participes en suivant les consignes (photo, description, feedback…)\n• Ta participation doit être **claire, utile et honnête**\n• En fin de semaine, un gagnant est choisi pour les **50€**"
+          },
+          {
+            "name": "📊  POINTS BUILDER",
+            "value": "Les missions peuvent te rapporter des **points Builder**, qui comptent pour le rôle 🎖 *Builders Gearted*.\n\nExemples (indicatif) :\n• Participation sérieuse à une mission : `+1 à +3 pts`\n• Contribution exceptionnelle (détaillée, utile pour l’app) : `+5 pts`\n\n👉 À partir d’un certain seuil (ex : **20 points**), tu peux débloquer le rôle **Builders Gearted** et ses avantages."
+          },
+          {
+            "name": "🤝  PARRAINAGE & MISSIONS SPÉCIALES",
+            "value": "Certaines opérations seront centrées sur le **parrainage** :\n\n• Inviter un nouveau membre **actif** (qui se présente, participe, etc.)\n• Le filleul mentionne qui l’a invité\n• Tu gagnes des points Builder si le parrainage est validé\n\n⚠️ Comptes fake, inactifs ou spam d’invitations = non comptés."
+          },
+          {
+            "name": "🏆  DÉROULEMENT D’UNE SEMAINE TYPE",
+            "value": "1️⃣ Lancement de l’Opération dans <#🎯-missions-de-la-semaine>\n2️⃣ Les membres postent leurs contributions\n3️⃣ Le staff analyse / valide les participations\n4️⃣ Annonce du **gagnant des 50€** dans <#🏆-hall-of-fame>\n5️⃣ Mise à jour des **points Builder**"
+          },
+          {
+            "name": "🎖  AVANTAGES BUILDERS",
+            "value": "Les membres qui atteignent le rôle **Builders Gearted** obtiennent :\n\n• ✅ **1 mois sans commission** sur Gearted\n• 🏆 Pour les **10 premiers Builders** : **Premium à vie**\n\nCe rôle est réservé aux vrais **bâtisseurs** de l’app et de la commu."
+          }
+        ],
+        "footer": {
+          "text": "Gearted • Missions hebdo & Programme Builders"
+        }
+      }
+    ]
+  }
+  

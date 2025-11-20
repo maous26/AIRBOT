@@ -1,0 +1,32 @@
+{
+    "content": "",
+    "embeds": [
+      {
+        "title": "🪖 Bienvenue au QG Gearted",
+        "description": "Bienvenue dans **Gearted – QG de l’Airsoft Francophone** !\n\nTu rejoins ici une communauté de joueurs passionnés, de teams, de créateurs et les futurs utilisateurs de la marketplace **Gearted**.",
+        "color": 2829099,
+        "fields": [
+          {
+            "name": "🌍 Choisis ton pays",
+            "value": "Pour recevoir les bonnes infos (parties, events, annonces), choisis ton pays en cliquant sur le drapeau correspondant :\n\n🇫🇷 France • 🇧🇪 Belgique • 🇨🇭 Suisse\n\n> *(Un bot ou un message à réactions attribuera automatiquement ton rôle pays).*"
+          },
+          {
+            "name": "🎯 Ce que tu vas trouver ici",
+            "value": "• Discussions entre airsofteurs\n• Organisation de parties et rencontres\n• Tests, idées et feedbacks sur **Gearted**\n• Transactions déjà réalisées entre membres\n• Missions hebdo pour gagner **50€**\n• Collaborations avec terrains, shops et équipes"
+          },
+          {
+            "name": "🔥 Première action",
+            "value": "👉 Va voir **<##🎯-missions-de-la-semaine>** pour découvrir l’Opération en cours et tenter de gagner la récompense de **50€**."
+          },
+          {
+            "name": "🚀 Premiers pas",
+            "value": "1️⃣ Lis les règles : **<#📜-règles>**\n2️⃣ Présente-toi ou parle de ton matos dans **<##💬-général>**\n3️⃣ Suis les annonces importantes dans **<#📣-annonces-officielles>**"
+          }
+        ],
+        "footer": {
+          "text": "Gearted • QG de l’Airsoft Francophone"
+        }
+      }
+    ]
+  }
+  
